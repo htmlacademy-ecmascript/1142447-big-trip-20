@@ -9,13 +9,13 @@ npm i eslint@8.38.0 -DE
 ```
 
 ## Зависимости приложения (`dependencies`)
-
+// npm i -E dayjs@1.11.7
 - dayjs@1.11.7
 - flatpickr@4.6.13
 - he@1.2.0
 
 ## Зависимости для разработки (`devDependencies`)
-
+// npm i -DE webpack@5.79.0
 - eslint@8.38.0
 - eslint-config-htmlacademy@9.0.0
 - webpack@5.79.0
