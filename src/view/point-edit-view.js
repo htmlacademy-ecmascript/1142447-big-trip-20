@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createPointEditTemplate(point, offers, destinations) {
   return (
@@ -86,31 +86,39 @@ function createPointEditTemplate(point, offers, destinations) {
   </li>`
   );
 }
-
-export default class PointEditView {
+export default class PointEditView extends AbstractView {
   #point = null;
   #offers = [];
   #destinations = [];
+  #handleFormSubmit = null;
+  #handleEditClick = null;
 
-  constructor(point, offers, destinations) {
+  constructor(point, offers, destinations, onFormSubmit, onEditClick) {
+    super();
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#editClickHandler);
   }
 
-  getTemplate() {
+  get template() {
     return createPointEditTemplate(this.#point, this.#destinations, this.#offers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 }
