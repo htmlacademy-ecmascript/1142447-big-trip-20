@@ -1,7 +1,31 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createFilterTemplate() {
+//function createFilterTemplate() {
+function createFilterItemTemplate(filter, isChecked) {
+  const {type, count} = filter;
+
   return (
+    `<input
+        type="radio"
+        id="filter__${type}"
+        class="filter__input visually-hidden"
+        name="filter"
+        ${isChecked ? 'checked' : ''}
+        ${count === 0 ? 'disabled' : ''}
+      />
+      <label for="filter__${type}" class="filter__label">
+        ${type} <span class="filter__${type}-count">${count}</span></label
+      >`
+  );
+}
+
+function createFilterTemplate(filterItems) {
+  const filterItemsTemplate = filterItems
+    .map((filter, index) => createFilterItemTemplate(filter, index === 0))
+    .join('');
+
+
+  /*return (
     `<div class="trip-main__trip-controls  trip-controls">
     <div class="trip-controls__filters">
       <h2 class="visually-hidden">Filter events</h2>
@@ -32,9 +56,29 @@ function createFilterTemplate() {
   </div>`
   );
 }
+*/
+
+${filterItemsTemplate}
+</section>`
+);
+}
 
 export default class FilterView extends AbstractView {
+#filters = null;
+
+constructor({filters}) {
+super();
+this.#filters = filters;
+}
+
+get template() {
+  return createFilterTemplate(this.#filters);
+}
+}
+
+/*export default class FilterView extends AbstractView {
   get template() {
     return createFilterTemplate();
   }
 }
+*/
