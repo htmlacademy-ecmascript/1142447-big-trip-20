@@ -5,17 +5,10 @@ function createFilterItemTemplate(filter, isChecked) {
   const {type, count} = filter;
 
   return (
-    `<input
-        type="radio"
-        id="filter__${type}"
-        class="filter__input visually-hidden"
-        name="filter"
-        ${isChecked ? 'checked' : ''}
-        ${count === 0 ? 'disabled' : ''}
-      />
-      <label for="filter__${type}" class="filter__label">
-        ${type} <span class="filter__${type}-count">${count}</span></label
-      >`
+    `<div class="trip-filters__filter">
+    <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" ${isChecked ? 'cheched' : ''} ${count === 0 ? 'disabled' : ''} >
+    <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
+  </div>`
   );
 }
 
@@ -25,30 +18,13 @@ function createFilterTemplate(filterItems) {
     .join('');
 
 
-  /*return (
+  return (
     `<div class="trip-main__trip-controls  trip-controls">
     <div class="trip-controls__filters">
       <h2 class="visually-hidden">Filter events</h2>
       <form class="trip-filters" action="#" method="get">
-        <div class="trip-filters__filter">
-          <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked>
-          <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
-        </div>
 
-        <div class="trip-filters__filter">
-          <input id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future">
-          <label class="trip-filters__filter-label" for="filter-future">Future</label>
-        </div>
-
-        <div class="trip-filters__filter">
-          <input id="filter-present" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="present">
-          <label class="trip-filters__filter-label" for="filter-present">Present</label>
-        </div>
-
-        <div class="trip-filters__filter">
-          <input id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past">
-          <label class="trip-filters__filter-label" for="filter-past">Past</label>
-        </div>
+      ${filterItemsTemplate}
 
         <button class="visually-hidden" type="submit">Accept filter</button>
       </form>
@@ -56,24 +32,18 @@ function createFilterTemplate(filterItems) {
   </div>`
   );
 }
-*/
-
-${filterItemsTemplate}
-</section>`
-);
-}
 
 export default class FilterView extends AbstractView {
-#filters = null;
+  #filters = null;
 
-constructor({filters}) {
-super();
-this.#filters = filters;
-}
+  constructor({filters}) {
+    super();
+    this.#filters = filters;
+  }
 
-get template() {
-  return createFilterTemplate(this.#filters);
-}
+  get template() {
+    return createFilterTemplate(this.#filters);
+  }
 }
 
 /*export default class FilterView extends AbstractView {

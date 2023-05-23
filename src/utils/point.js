@@ -3,16 +3,18 @@ const DATE_FORMAT = 'D MMMM';
 function humanizePointTravelDate(travelDate) {
   return travelDate ? dayjs(travelDate).format(DATE_FORMAT) : '';
 }
-function isPointExpired(travelDate) {
+function isPointFuture(travelDate) {
   return travelDate && dayjs().isAfter(travelDate, 'D');
 }
-function isTravelRepeating(repeating) {
+/*function isTravelRepeating(repeating) {
   return Object.values(repeating).some(Boolean);
-}
+}*/
 
-export {humanizePointTravelDate, isPointExpired, isPointRepeating};
-function isPointExpiringToday(travelDate) {
+function isPointPresent(travelDate) {
   return travelDate && dayjs(travelDate).isSame(dayjs(), 'D');
 }
+function isPointPast(travelDate) {
+  return travelDate && dayjs().isBefore(travelDate, 'D');
+}
 
-export {humanizePointTravelDate, isPointExpired, isPointRepeating, isPointExpiringToday};
+export {isPointFuture, isPointPast, isPointPresent, humanizePointTravelDate};

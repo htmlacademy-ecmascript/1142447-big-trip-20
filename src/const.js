@@ -1,12 +1,10 @@
-const COLORS = ['black', 'yellow', 'blue', 'green', 'pink'];
-
-const filterTypes = {
+const FilterTypes = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PRESENT: 'present',
   PAST: 'past',
-  FAVORITES: 'favorites',
+  //FAVORITES: 'favorites',
 };
 
-export {COLORS, filterTypes};
+export {FilterTypes};
 
