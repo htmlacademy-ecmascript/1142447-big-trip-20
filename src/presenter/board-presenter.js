@@ -17,12 +17,13 @@ export default class BoardPresenter {
     this.boardContainer = boardContainer;
   }
 
-  async init() {
+  async init(renderFilters) {
     this.#pointsData = await this.#pointsModel.getRoutePoints();
     this.#offersData = await this.#pointsModel.getOffers();
     this.#destinationsData = await this.#pointsModel.getDestinations();
     render(new SortView(), this.boardContainer);
     render(this.pointListComponent, this.boardContainer);
+    renderFilters(this.#pointsData);
     //render(new PointEditView(this.#pointsData[2], this.#destinationsData, this.#offersData), this.pointListComponent.element);
 
     this.#pointsData.forEach((point) => {
