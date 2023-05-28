@@ -6,5 +6,11 @@ const FilterTypes = {
   //FAVORITES: 'favorites',
 };
 
-export {FilterTypes};
+const SortType = {
+  DEFAULT: 'default',
+  DATE_DOWN: 'date-down',
+  DATE_UP: 'date-up',
+};
+
+export {FilterType, SortType};
 
