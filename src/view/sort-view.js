@@ -27,11 +27,7 @@ function createSortTemplate() {
       <input id="sort-offer" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-offer" disabled>
       <label class="trip-sort__btn" for="sort-offer">Offers</label>
 
-/*28 мая из демопроекта хотела кокоммент, но не получилось
-      <a href="#" class="board__sort-item" data-sort-type="${SortType.DEFAULT}">SORT BY DEFAULT</a>
-      <a href="#" class="board__sort-item" data-sort-type="${SortType.DATE_UP}">SORT BY DATE up</a>
-      <a href="#" class="board__sort-item" data-sort-type="${SortType.DATE_DOWN}">SORT BY DATE down</a>
-    */
+
       </div>
   </form>`
   );
@@ -39,7 +35,7 @@ function createSortTemplate() {
 export default class SortView extends AbstractView {
 
   #handleSortTypeChange = null;
-  constructor({onSortTypeChange}) {
+  constructor(onSortTypeChange) {
     super();
     this.#handleSortTypeChange = onSortTypeChange;
 
@@ -59,3 +55,9 @@ export default class SortView extends AbstractView {
     this.#handleSortTypeChange(evt.target.dataset.sortType);
   };
 }
+
+/*
+      <a href="#" class="board__sort-item" data-sort-type="${SortType.DEFAULT}">SORT BY DEFAULT</a>
+      <a href="#" class="board__sort-item" data-sort-type="${SortType.DATE_UP}">SORT BY DATE up</a>
+      <a href="#" class="board__sort-item" data-sort-type="${SortType.DATE_DOWN}">SORT BY DATE down</a>
+    */

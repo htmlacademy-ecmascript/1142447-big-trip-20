@@ -12,5 +12,5 @@ const SortType = {
   DATE_UP: 'date-up',
 };
 
-export {FilterType, SortType};
+export {FilterTypes, SortType};
 

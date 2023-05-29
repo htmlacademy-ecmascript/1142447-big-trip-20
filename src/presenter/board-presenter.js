@@ -1,6 +1,6 @@
 import SortView from '../view/sort-view.js';
 import PointListView from '../view/point-list-view.js';
-import {render, RenderPosition, remove} from '../framework/render.js';
+import {render, RenderPosition} from '../framework/render.js';
 import PointsModel from '../models/points-model.js';
 import PointPresenter from './point-presenter.js';
 import {updateItem} from '../utils/common.js';
@@ -16,8 +16,8 @@ export default class BoardPresenter {
   #sortComponent = null;
   #currentSortType = SortType.DEFAULT;
   #sourcedBoardPoints = [];
-
-  pointListComponent = new PointListView();
+  #boardPoints = [];
+  #pointListComponent = new PointListView();
 
 
   constructor({boardContainer}) {
@@ -29,15 +29,14 @@ export default class BoardPresenter {
     this.#offersData = await this.#pointsModel.getOffers();
     this.#destinationsData = await this.#pointsModel.getDestinations();
     render(new SortView(), this.boardContainer);
-    render(this.pointListComponent, this.boardContainer);
+    render(this.#pointListComponent, this.boardContainer);
     renderFilters(this.#pointsData);
     //render(new PointEditView(this.#pointsData[2], this.#destinationsData, this.#offersData), this.pointListComponent.element);
 
     this.#pointsData.forEach((point) => {
       this.#renderPoint(point);
     });
-    pointPresenter.init(point);
-    this.#pointPresenters.set(point.id, this.#pointPresenter);
+
     this.#boardPoints = [...this.#pointsModel.points];
     // 1. В отличии от сортировки по любому параметру,
     // исходный порядок можно сохранить только одним способом -
@@ -51,28 +50,21 @@ export default class BoardPresenter {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListComponent.element,
       onDataChange: this.#handlePointChange,
-      onModeChange: this.#handleModeChang
+      onModeChange: this.#handleModeChange
     });
 
     pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderPoints(from, to) {
+  #renderPoints() {
     this.#boardPoints
-      .slice(from, to)
       .forEach((point) => this.#renderPoint(point));
   }
+  /*
   #renderNoPoints() {
     render(this.#noPointComponent, this.#boardComponent.element, RenderPosition.AFTERBEGIN);
-  }
-
-  #renderLoadMoreButton() {
-    this.#loadMoreButtonComponent = new LoadMoreButtonView({
-      onClick: this.#handleLoadMoreButtonClick
-    });
-
-    render(this.#loadMoreButtonComponent, this.#boardComponent.element);
-  }
+  }*/
 
   #handlePointChange = (updatedPoint) => {
     this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
@@ -80,6 +72,7 @@ export default class BoardPresenter {
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
 
   };
+
   #sortPoints(sortType) {
     // 2. Этот исходный массив задач необходим,
     // потому что для сортировки мы будем мутировать
@@ -116,14 +109,12 @@ export default class BoardPresenter {
       onSortTypeChange: this.#handleSortTypeChange
     });
 
-    render(this.#sortComponent, this.#boardComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#sortComponent, this.boardContainer.element, RenderPosition.AFTERBEGIN);
   }
 
   #clearPointList() {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
-    this.#renderedPointCount = POINT_COUNT_PER_STEP;
-    remove(this.#loadMoreButtonComponent);
   }
 
   #handleModeChange = () => {
@@ -131,24 +122,22 @@ export default class BoardPresenter {
   };
 
   #renderPointList() {
-    render(this.#pointListComponent, this.#boardComponent.element);
-    this.#renderPoints(0, Math.min(this.#boardPoints.length, POINT_COUNT_PER_STEP));
-    if (this.#boardPoints.length > POINT_COUNT_PER_STEP) {
-      this.#renderLoadMoreButton();
-    }
+    render(this.#pointListComponent, this.boardContainer.element);
+    this.#renderPoints();
   }
+
   #renderBoard() {
-    render(this.#boardComponent, this.#boardContainer);
-    if (this.#boardPoints.every((point) => point.isArchive)) {
+
+    /*if (this.#boardPoints.every((point) => point.isArchive)) {
       this.#renderNoPoints();
       return;
-    }
+    }*/
     this.#renderSort();
     this.#renderPointList();
   }
 }
 
-    /* const escKeyDownHandler = (evt) => {
+/* const escKeyDownHandler = (evt) => {
       if (evt.key === 'Escape') {
         evt.preventDefault();
         replaceFormToCard();
@@ -165,7 +154,7 @@ export default class BoardPresenter {
       }
     );*/
 
-    /*const pointEditComponent = new PointEditView(
+/*const pointEditComponent = new PointEditView(
       point,
       this.#destinationsData,
       this.#offersData,

@@ -48,4 +48,4 @@ function sortPointDown(pointA, pointB) {
   return weight ?? dayjs(pointB.dueDate).diff(dayjs(pointA.dueDate));
 }
 
-export {humanizePointTravelDate, isPointExpired, isPointRepeating, isPointExpiringToday, sortPointUp, sortPointDown};
+export {humanizePointTravelDate, sortPointUp, sortPointDown, isPointFuture, isPointPresent, isPointPast};
