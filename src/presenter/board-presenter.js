@@ -9,7 +9,7 @@ import {SortType} from '../const.js';
 
 export default class BoardPresenter {
   #pointsModel = new PointsModel();
-  #pointsData = null;
+  #pointsData = [];
   #offersData = null;
   #destinationsData = null;
   #pointPresenters = new Map();
@@ -25,10 +25,15 @@ export default class BoardPresenter {
   }
 
   async init(renderFilters) {
-    this.#pointsData = await this.#pointsModel.getRoutePoints();
-    this.#offersData = await this.#pointsModel.getOffers();
-    this.#destinationsData = await this.#pointsModel.getDestinations();
-    render(new SortView(), this.boardContainer);
+    await this.#pointsModel.getRoutePoints();
+    await this.#pointsModel.getOffers();
+    await this.#pointsModel.getDestinations();
+
+    this.#pointsData = this.#pointsModel.points;
+    this.#offersData = this.#pointsModel.offers;
+    this.#destinationsData = this.#pointsModel.destinations;
+
+    // render(new SortView(), this.boardContainer);
     render(this.#pointListComponent, this.boardContainer);
     renderFilters(this.#pointsData);
     //render(new PointEditView(this.#pointsData[2], this.#destinationsData, this.#offersData), this.pointListComponent.element);
@@ -53,7 +58,7 @@ export default class BoardPresenter {
       onModeChange: this.#handleModeChange
     });
 
-    pointPresenter.init(point);
+    pointPresenter.init(point, this.#destinationsData, this.#offersData);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
@@ -69,7 +74,7 @@ export default class BoardPresenter {
   #handlePointChange = (updatedPoint) => {
     this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
     this.#sourcedBoardPoints = updateItem(this.#sourcedBoardPoints, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#destinationsData, this.#offersData);
 
   };
 
@@ -105,11 +110,14 @@ export default class BoardPresenter {
   };
 
   #renderSort() {
+    if (this.#sortComponent) {
+      this.#sortComponent.removeElement();
+    }
     this.#sortComponent = new SortView({
       onSortTypeChange: this.#handleSortTypeChange
     });
 
-    render(this.#sortComponent, this.boardContainer.element, RenderPosition.AFTERBEGIN);
+    render(this.#sortComponent, this.boardContainer, RenderPosition.AFTERBEGIN);
   }
 
   #clearPointList() {
@@ -122,7 +130,8 @@ export default class BoardPresenter {
   };
 
   #renderPointList() {
-    render(this.#pointListComponent, this.boardContainer.element);
+    this.#clearPointList();
+    render(this.#pointListComponent, this.boardContainer);
     this.#renderPoints();
   }
 
@@ -136,45 +145,3 @@ export default class BoardPresenter {
     this.#renderPointList();
   }
 }
-
-/* const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-    const pointComponent = new PointView(
-      point,
-      this.#destinationsData.find((el) => el.id === point.destination),
-      this.#offersData.find((el) => el.type === point.type),
-      () => {
-        replaceCardToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
-    );*/
-
-/*const pointEditComponent = new PointEditView(
-      point,
-      this.#destinationsData,
-      this.#offersData,
-      () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      },
-      () => {
-        replaceFormToCard();
-      }
-    );
-
-    function replaceCardToForm() {
-      replace(pointEditComponent, pointComponent);
-    }
-
-    function replaceFormToCard() {
-      replace(pointComponent, pointEditComponent);
-    }
-
-    render(pointComponent, this.pointListComponent.element);
-  }
-};*/

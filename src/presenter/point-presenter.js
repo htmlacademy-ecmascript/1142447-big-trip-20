@@ -24,7 +24,7 @@ export default class PointPresenter {
     this.#handleModeChange = onModeChange;
   }
 
-  init(point) {
+  init(point, destinations, offers) {
     this.#point = point;
 
     const prevPointComponent = this.#pointComponent;
@@ -33,13 +33,18 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView({
       point: this.#point,
+      destinations,
+      offers,
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavoriteClick,
     });
 
     this.#pointEditComponent = new PointEditView({
       point: this.#point,
+      destinations,
+      offers,
       onFormSubmit: this.#handleFormSubmit,
+      onEditClick: this.#handleFormSubmit
     });
     /*
     render(this.#pointComponent, this.#pointListContainer);
@@ -110,8 +115,8 @@ export default class PointPresenter {
       this.#handleDataChange({...this.#point, isArchive: !this.#point.isArchive});
     };
   */
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+  #handleFormSubmit = () => {
+    this.#handleDataChange(this.#point);
 
     this.#replaceFormToCard();
   };

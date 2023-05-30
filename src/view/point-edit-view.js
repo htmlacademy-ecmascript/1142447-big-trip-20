@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createPointEditTemplate(point, offers, destinations) {
+function createPointEditTemplate(point, destinations, offers) {
   return (
     `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -93,7 +93,7 @@ export default class PointEditView extends AbstractView {
   #handleFormSubmit = null;
   #handleEditClick = null;
 
-  constructor(point, offers, destinations, onFormSubmit, onEditClick) {
+  constructor({point, offers, destinations, onFormSubmit, onEditClick}) {
     super();
     this.#point = point;
     this.#offers = offers;
