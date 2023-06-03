@@ -1,21 +1,22 @@
 import dayjs from 'dayjs';
-const DATE_FORMAT = 'D MMMM';
+const DATE_FORMAT = 'DD MMMM';
 function humanizePointTravelDate(travelDate) {
   return travelDate ? dayjs(travelDate).format(DATE_FORMAT) : '';
 }
 function isPointFuture(travelDate) {
-  return travelDate && dayjs().isAfter(travelDate, 'D');
+  return travelDate && dayjs().isAfter(travelDate, 'DD');
 }
 /*function isTravelRepeating(repeating) {
   return Object.values(repeating).some(Boolean);
 }*/
 
 function isPointPresent(travelDate) {
-  return travelDate && dayjs(travelDate).isSame(dayjs(), 'D');
+  return travelDate && dayjs(travelDate).isSame(dayjs(), 'DD');
 }
 function isPointPast(travelDate) {
-  return travelDate && dayjs().isBefore(travelDate, 'D');
+  return travelDate && dayjs().isBefore(travelDate, 'DD');
 }
+
 
 //export {isPointFuture, isPointPast, isPointPresent, humanizePointTravelDate};
 // Функция помещает задачи без даты в конце списка,

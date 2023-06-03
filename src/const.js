@@ -7,9 +7,8 @@ const FilterTypes = {
 };
 
 const SortType = {
-  DEFAULT: 'default',
-  DATE_DOWN: 'date-down',
-  DATE_UP: 'date-up',
+  TIME: 'time',
+  PRICE: 'price',
 };
 
 export {FilterTypes, SortType};
