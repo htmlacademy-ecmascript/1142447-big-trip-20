@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {SortType} from '../const.js';
+
 
 function createSortTemplate() {
   return (
@@ -16,36 +16,30 @@ function createSortTemplate() {
     </div>
 
     <div class="trip-sort__item  trip-sort__item--time">
-      <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
+      <input data-sort-type="time" id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
       <label class="trip-sort__btn" for="sort-time">Time</label>
     </div>
 
     <div class="trip-sort__item  trip-sort__item--price">
-      <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
+      <input data-sort-type="price" id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
       <label class="trip-sort__btn" for="sort-price">Price</label>
     </div>
 
     <div class="trip-sort__item  trip-sort__item--offer">
       <input id="sort-offer" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-offer" disabled>
-      <label class="trip-sort__btn" for="sort-offer">Offers</label>*/
-
-      <div class="board__sort-list">
-
-      <a href="#" class="board__sort-item" data-sort-type="${SortType.TIME}">SORT TIME</a>
-      <a href="#" class="board__sort-item" data-sort-type="${SortType.PRICE}">SORT PRICE</a>
-
-      </div>
+      <label class="trip-sort__btn" for="sort-offer">Offers</label>
+    </div>
   </form>`
   );
 }
 export default class SortView extends AbstractView {
 
   #handleSortTypeChange = null;
-  constructor(onSortTypeChange) {
+  constructor({onSortTypeChange}) {
     super();
     this.#handleSortTypeChange = onSortTypeChange;
 
-    this.element.addEventListener('click', this.#sortTypeChangeHandler);
+    this.element.addEventListener('change', this.#sortTypeChangeHandler);
   }
 
   get template() {
@@ -53,13 +47,7 @@ export default class SortView extends AbstractView {
   }
 
   #sortTypeChangeHandler = (evt) => {
-    if (evt.target.tagName !== 'A') {
-      return;
-    }
-
-    evt.preventDefault();
     this.#handleSortTypeChange(evt.target.dataset.sortType);
-
   };
 }
 
