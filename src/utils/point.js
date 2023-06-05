@@ -1,21 +1,27 @@
 import dayjs from 'dayjs';
-const DATE_FORMAT = 'D MMMM';
+const DATE_FORMAT = 'DD MMMM';
+const DATE_MONTH_FORMAT = 'MMMM DD';
+
 function humanizePointTravelDate(travelDate) {
   return travelDate ? dayjs(travelDate).format(DATE_FORMAT) : '';
 }
+function humanizePointTravelDateMonth(travelDate) {
+  return travelDate ? dayjs(travelDate).format(DATE_MONTH_FORMAT) : '';
+}
 function isPointFuture(travelDate) {
-  return travelDate && dayjs().isAfter(travelDate, 'D');
+  return travelDate && dayjs().isAfter(travelDate, 'DD');
 }
 /*function isTravelRepeating(repeating) {
   return Object.values(repeating).some(Boolean);
 }*/
 
 function isPointPresent(travelDate) {
-  return travelDate && dayjs(travelDate).isSame(dayjs(), 'D');
+  return travelDate && dayjs(travelDate).isSame(dayjs(), 'DD');
 }
 function isPointPast(travelDate) {
-  return travelDate && dayjs().isBefore(travelDate, 'D');
+  return travelDate && dayjs().isBefore(travelDate, 'DD');
 }
+
 
 //export {isPointFuture, isPointPast, isPointPresent, humanizePointTravelDate};
 // Функция помещает задачи без даты в конце списка,
@@ -37,9 +43,13 @@ function getWeightForNullDate(dateA, dateB) {
 }
 
 function sortPointUp(pointA, pointB) {
-  const weight = getWeightForNullDate(pointA.dueDate, pointB.dueDate);
+  const durationA = dayjs(pointA.dateStop).diff(pointA.dateStart) ?? 0;
+  const durationB = dayjs(pointB.dateStop).diff(pointB.dateStart) ?? 0;
+  return durationB - durationA;
+}
 
-  return weight ?? dayjs(pointA.dueDate).diff(dayjs(pointB.dueDate));
+function sortPrice(pointA, pointB) {
+  return pointB.basePrice - pointA.basePrice;
 }
 
 function sortPointDown(pointA, pointB) {
@@ -48,4 +58,4 @@ function sortPointDown(pointA, pointB) {
   return weight ?? dayjs(pointB.dueDate).diff(dayjs(pointA.dueDate));
 }
 
-export {humanizePointTravelDate, sortPointUp, sortPointDown, isPointFuture, isPointPresent, isPointPast};
+export {humanizePointTravelDate, humanizePointTravelDateMonth, sortPrice, sortPointUp, sortPointDown, isPointFuture, isPointPresent, isPointPast};

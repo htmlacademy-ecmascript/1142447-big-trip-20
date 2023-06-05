@@ -1,4 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import {humanizePointTravelDate} from '../utils/point.js';
 
 function createPointEditTemplate(point, destinations, offers) {
   return (
@@ -39,10 +40,10 @@ function createPointEditTemplate(point, destinations, offers) {
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${point.dateStart}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizePointTravelDate(point.dateStart)}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${point.dateStop}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizePointTravelDate(point.dateStop)}">
         </div>
 
         <div class="event__field-group  event__field-group--price">

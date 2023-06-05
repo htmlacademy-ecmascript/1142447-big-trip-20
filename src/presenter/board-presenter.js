@@ -4,9 +4,8 @@ import {render, RenderPosition} from '../framework/render.js';
 import PointsModel from '../models/points-model.js';
 import PointPresenter from './point-presenter.js';
 import {updateItem} from '../utils/common.js';
-import {sortPointUp, sortPointDown} from '../utils/point.js';
+import {sortPointUp, sortPrice} from '../utils/point.js';
 import {SortType} from '../const.js';
-
 export default class BoardPresenter {
   #pointsModel = new PointsModel();
   #pointsData = [];
@@ -14,11 +13,10 @@ export default class BoardPresenter {
   #destinationsData = null;
   #pointPresenters = new Map();
   #sortComponent = null;
-  #currentSortType = SortType.DEFAULT;
+  #currentSortType = SortType.TIME;
   #sourcedBoardPoints = [];
   #boardPoints = [];
   #pointListComponent = new PointListView();
-
 
   constructor({boardContainer}) {
     this.boardContainer = boardContainer;
@@ -83,15 +81,16 @@ export default class BoardPresenter {
     // потому что для сортировки мы будем мутировать
     // массив в свойстве _boardPoints
     switch (sortType) {
-      case SortType.DATE_UP:
+
+      case SortType.TIME:
         this.#boardPoints.sort(sortPointUp);
         break;
-      case SortType.DATE_DOWN:
-        this.#boardPoints.sort(sortPointDown);
+      case SortType.PRICE:
+        this.#boardPoints.sort(sortPrice);
         break;
       default:
         // 3. А когда пользователь захочет "вернуть всё, как было",
-        // мы просто запишем в _boardTasks исходный массив
+        // мы просто запишем в _boardPoints исходный массив
         this.#boardPoints = [...this.#sourcedBoardPoints];
     }
 
@@ -104,6 +103,8 @@ export default class BoardPresenter {
     }
 
     this.#sortPoints(sortType);
+    this.#renderPointList();
+
     // - Сортируем задачи
     // - Очищаем список
     // - Рендерим список заново
