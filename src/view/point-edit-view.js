@@ -1,5 +1,8 @@
 import {humanizePointTravelDate} from '../utils/point.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createPointEditTemplate(state, point, destinations, offers) {
   return (
@@ -100,6 +103,8 @@ export default class PointEditView extends AbstractStatefulView {
   #destinations = [];
   #handleFormSubmit = null;
   #handleEditClick = null;
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
   constructor({point, offers, destinations, onFormSubmit, onEditClick}) {
     super();
@@ -112,6 +117,8 @@ export default class PointEditView extends AbstractStatefulView {
     this._setState(PointEditView.parsePointToState ({point}));
 
     this._restoreHandlers();
+
+    this.#setDatepickers();
   }
 
   #resetButtonClickHandler = (evt) => {
@@ -213,18 +220,94 @@ export default class PointEditView extends AbstractStatefulView {
       offers: this.#offers.find((offer) => offer.type.toLowerCase() === this._state.point.type.toLowerCase())?.offers
     };
     return createPointEditTemplate(state, this.#point, this.#destinations, this.#offers);
-
   }
 
-  /*#formSubmitHandler = (evt) => {
-    evt.preventDefault();
-    this.#handleFormSubmit(this.#point);
-  };*/
+  //перегружаем метод родителя removeElement,
+  //чтобы при удалении удалялся более не нужный календарь
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
+  }
+
+
+  #dueDateChangeHandler = ([userDate]) => {
+    this.updateElement ({
+      dueDate:  userDate,
+    });
+  };
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditClick();
   };
+
+  #setDatepickers = () => {
+    const [dateStartElement, dateEndElement] = this.element.querySelectorAll('.event__input--time');
+    this.#datepickerStart = flatpickr(
+      dateStartElement,
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.startDate,
+        onClose: this.#dateStartChangeHandler,
+        enableTime: true,
+        maxDate: this._state.endDate,
+        locale: {
+          firstDayOfWeek: 1
+        },
+        'time_24hr': true
+      }
+    );
+    this.#datepickerEnd = flatpickr(
+      dateEndElement,
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.endDate,
+        onClose: this.#dateEndChangeHandler,
+        enableTime: true,
+        minDate: this._state.startDate,
+        locale: {
+          firstDayOfWeek: 1
+        },
+        'time_24hr': true
+      }
+    );
+  };
+
+  #dateStartChangeHandler = ([userDate]) => {
+    this._setState({
+      startDate: userDate,
+    });
+  };
+
+  #dateEndChangeHandler = ([userDate]) => {
+    this._setState({
+      endDate: userDate,
+    });
+  };
+
+  /* #setDatepicker() {
+    if (this._state.isDueDate) {
+      //flatpickr есть смысл инициализировать только в случае, если
+      //поле выбора даты доступно для заполнения
+      this.#datepicker = flatpickr(
+        this.element.querySelector('.card__date'),
+        {
+          dateFormat: 'j F',
+          defaultDate: this._state.dueDate,
+          onChange: this.#dueDateChangeHandler,
+          //на событие flatpickr передаем наш колбэк
+        }
+      );
+    }
+  }*/
 
   static parsePointToState = ({point}) => ({point});
 
