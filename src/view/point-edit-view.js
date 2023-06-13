@@ -117,8 +117,6 @@ export default class PointEditView extends AbstractStatefulView {
     this._setState(PointEditView.parsePointToState ({point}));
 
     this._restoreHandlers();
-
-    this.#setDatepickers();
   }
 
   #resetButtonClickHandler = (evt) => {
@@ -145,6 +143,9 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   _restoreHandlers = () => {
+
+    this.#setDatepickers();
+
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
 
@@ -283,15 +284,32 @@ export default class PointEditView extends AbstractStatefulView {
 
   #dateStartChangeHandler = ([userDate]) => {
     this._setState({
-      startDate: userDate,
+      point: {
+        ...this._state.point,
+        dateStart: userDate
+      }
     });
+    /* this._setState({
+      startDate: userDate,
+    });*/
   };
+  //по замечаниям Анастасии 13.06.
+
 
   #dateEndChangeHandler = ([userDate]) => {
     this._setState({
-      endDate: userDate,
+      point: {
+        ...this._state.point,
+        dateEnd: userDate
+      }
     });
+
+    /*this._setState({
+      endDate: userDate,
+    });*/
   };
+  //по замечаниям Анастасии 13.06.
+
 
   /* #setDatepicker() {
     if (this._state.isDueDate) {
