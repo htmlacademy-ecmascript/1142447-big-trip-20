@@ -4,6 +4,8 @@ import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
+import he from 'he';
+
 function createPointEditTemplate(state, point, destinations, offers) {
   return (
     `<li class="trip-events__item">
@@ -89,6 +91,11 @@ function createPointEditTemplate(state, point, destinations, offers) {
               ${state.destination.pictures.map((picture) => `
                 <img class="event__photo" src="${picture.src}" alt="Event photo">
               `).join('')}
+
+              >${he.encode(description)}</textarea>
+
+
+
             </div>
           </div>
         </section>
@@ -102,16 +109,22 @@ export default class PointEditView extends AbstractStatefulView {
   #offers = [];
   #destinations = [];
   #handleFormSubmit = null;
+
+  #handleDeleteClick = null;
+
   #handleEditClick = null;
   #datepickerStart = null;
   #datepickerEnd = null;
 
-  constructor({point, offers, destinations, onFormSubmit, onEditClick}) {
+  constructor({point, offers, destinations, onFormSubmit, onEditClick, onDeleteClick}) {
     super();
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleFormSubmit = onFormSubmit;
+
+    this.#handleDeleteClick = onDeleteClick;
+
     this.#handleEditClick = onEditClick;
 
     this._setState(PointEditView.parsePointToState ({point}));
@@ -151,6 +164,9 @@ export default class PointEditView extends AbstractStatefulView {
 
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#resetButtonClickHandler);
+
+      this.element.querySelector('.card__delete')
+      .addEventListener('click', this.#formDeleteClickHandler);
 
     this.element.querySelectorAll('.event__type-input')
       .forEach((element) => {
@@ -280,6 +296,11 @@ export default class PointEditView extends AbstractStatefulView {
         'time_24hr': true
       }
     );
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
 
   #dateStartChangeHandler = ([userDate]) => {

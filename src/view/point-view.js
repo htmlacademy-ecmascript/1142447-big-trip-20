@@ -1,3 +1,5 @@
+import he from 'he';
+
 import AbstractView from '../framework/view/abstract-view.js';
 import {humanizePointTravelDate, humanizePointTravelDateMonth} from '../utils/point.js';
 
@@ -39,6 +41,11 @@ function createPointTemplate(point, destination, offers) {
       </button>
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
+
+        <div class="card__textarea-wrap">
+        <p class="card__text">${he.encode(description)}</p>
+        </div>
+
       </button>
     </div>
   </li>`

@@ -1,6 +1,9 @@
 import {render, replace, remove} from '../framework/render.js';
 import PointView from '../view/point-view.js';
 import PointEditView from '../view/point-edit-view.js';
+import {UserAction, UpdateType} from '../const.js';
+
+import {isPointRepeating, isDatesEqual} from '../utils/point.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -18,9 +21,15 @@ export default class PointPresenter {
   #point = null;
   #mode = Mode.DEFAULT;
 
-  constructor({pointListContainer, onDataChange, onModeChange}) {
+  constructor({pointListContainer, /*onDataChange,*/ onModeChange}) {
     this.#pointListContainer = pointListContainer;
-    this.#handleDataChange = onDataChange;
+    //this.#handleDataChange = onDataChange;
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite},
+    );
+
     this.#handleModeChange = onModeChange;
   }
 
@@ -117,9 +126,32 @@ export default class PointPresenter {
       this.#handleDataChange({...this.#point, isArchive: !this.#point.isArchive});
     };
   */
-  #handleFormSubmit = () => {
-    this.#handleDataChange(this.#point);
+  //#handleFormSubmit = () => {
+  //this.#handleDataChange(this.#point);
 
+  #handleFormSubmit = (update) => {
+    // Проверяем, поменялись ли в задаче данные, которые попадают под фильтрацию,
+    // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
+    const isMinorUpdate =
+        !isDatesEqual(this.#point.dueDate, update.dueDate) ||
+        isPointRepeating(this.#point.repeating) !== isPointRepeating(update.repeating);
+
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      // UpdateType.MINOR,
+      //point,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
+    );
     this.#replaceFormToCard();
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+    //this.#replaceFormToCard();
   };
 }

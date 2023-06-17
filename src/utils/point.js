@@ -58,4 +58,9 @@ function sortPointDown(pointA, pointB) {
   return weight ?? dayjs(pointB.dueDate).diff(dayjs(pointA.dueDate));
 }
 
-export {humanizePointTravelDate, humanizePointTravelDateMonth, sortPrice, sortPointUp, sortPointDown, isPointFuture, isPointPresent, isPointPast};
+function isDatesEqual(dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+
+export {humanizePointTravelDate, humanizePointTravelDateMonth, sortPrice, sortPointUp, sortPointDown,
+  isPointFuture, isPointPresent, isPointPast, isDatesEqual};
