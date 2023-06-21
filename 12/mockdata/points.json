@@ -1,0 +1,123 @@
+[
+  {
+    "id": 1,
+    "dateStart": "2023-05-15T09:10:00.000Z",
+    "dateStop": "2023-05-16T14:30:00.000Z",
+    "type": "Flight",
+    "basePrice": 1000,
+    "offers": [
+      1,
+      2
+    ],
+    "destination": 2,
+    "isFavorite": true
+  },
+  {
+    "id": 2,
+    "dateStart": "2023-05-17T09:30:00.000Z",
+    "dateStop": "2023-05-20T10:00:00.000Z",
+    "type": "Sightseeing",
+    "basePrice": 1600,
+    "offers": [
+      1
+    ],
+    "destination": 3,
+    "isFavorite": false
+  },
+  {
+    "id": 3,
+    "dateStart": "2023-05-23T07:30:00.000Z",
+    "dateStop": "2023-05-25T19:30:00.000Z",
+    "type": "Check-In",
+    "basePrice": 1800,
+    "offers": [
+      1
+    ],
+    "destination": 4,
+    "isFavorite": true
+  },
+  {
+    "id": 4,
+    "dateStart": "2023-05-27T10:20:00.000Z",
+    "dateStop": "2023-05-29T21:00:00.000Z",
+    "type": "Sightseeing",
+    "basePrice": 1650,
+    "offers": [
+      1
+    ],
+    "destination": 5,
+    "isFavorite": true
+  },
+  {
+    "id": 5,
+    "dateStart": "2023-06-01T08:30:00.000Z",
+    "dateStop": "2023-06-03T10:30:00.000Z",
+    "type": "Restaurant",
+    "basePrice": 1450,
+    "offers": [
+      1
+    ],
+    "destination": 6,
+    "isFavorite": false
+  },
+  {
+    "id": 6,
+    "dateStart": "2023-06-04T11:00:00.000Z",
+    "dateStop": "2023-06-04T15:15:20.000Z",
+    "type": "Check-In",
+    "basePrice": 1270,
+    "offers": [
+      1
+    ],
+    "destination": 7,
+    "isFavorite": false
+  },
+  {
+    "id": 7,
+    "dateStart": "2023-06-05T17:10:00.000Z",
+    "dateStop": "2023-06-05T19:30:00.000Z",
+    "type": "Taxi",
+    "basePrice": 1700,
+    "offers": [
+      1
+    ],
+    "destination": 8,
+    "isFavorite": true
+  },
+  {
+    "id": 8,
+    "dateStart": "2023-06-07T10:30:00.000Z",
+    "dateStop": "2023-06-08T19:30:00.000Z",
+    "type": "Drive",
+    "basePrice": 1050,
+    "offers": [
+      1
+    ],
+    "destination": 9,
+    "isFavorite": false
+  },
+  {
+    "id": 9,
+    "dateStart": "2023-07-09T07:40:00.000Z",
+    "dateStop": "2023-07-10T21:10:00.000Z",
+    "type": "Drive",
+    "basePrice": 3000,
+    "offers": [
+      1
+    ],
+    "destination": 10,
+    "isFavorite": true
+  },
+  {
+    "id": 10,
+    "dateStart": "2023-07-12T15:20:00.000Z",
+    "dateStop": "2023-07-12T18:30:00.000Z",
+    "type": "Restaurant",
+    "basePrice": 900,
+    "offers": [
+      1
+    ],
+    "destination": 1,
+    "isFavorite": false
+  }
+]
