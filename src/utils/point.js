@@ -9,7 +9,7 @@ function humanizePointTravelDateMonth(travelDate) {
   return travelDate ? dayjs(travelDate).format(DATE_MONTH_FORMAT) : '';
 }
 function isPointFuture(travelDate) {
-  return travelDate && dayjs().isAfter(travelDate, 'DD');
+  return travelDate && dayjs().isBefore(travelDate, 'DD');
 }
 /*function isTravelRepeating(repeating) {
   return Object.values(repeating).some(Boolean);
@@ -19,7 +19,7 @@ function isPointPresent(travelDate) {
   return travelDate && dayjs(travelDate).isSame(dayjs(), 'DD');
 }
 function isPointPast(travelDate) {
-  return travelDate && dayjs().isBefore(travelDate, 'DD');
+  return travelDate && dayjs().isAfter(travelDate, 'DD');
 }
 
 

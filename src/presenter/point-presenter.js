@@ -1,6 +1,7 @@
 import {render, replace, remove} from '../framework/render.js';
 import PointView from '../view/point-view.js';
 import PointEditView from '../view/point-edit-view.js';
+import { UserAction, UpdateType } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -44,7 +45,10 @@ export default class PointPresenter {
       destinations,
       offers,
       onFormSubmit: this.#handleFormSubmit,
-      onEditClick: this.#handleFormSubmit
+      onEditClick: this.#handleFormSubmit,
+      onDeleteClick: this.#handleDeleteClick,
+      onResetClick: this.#handleResetClick,
+      isEditing: true
     });
     /*
     render(this.#pointComponent, this.#pointListContainer);
@@ -109,17 +113,20 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(UserAction.DELETE_POINT, UpdateType.MINOR, {...this.#point, isFavorite: !this.#point.isFavorite});
   };
 
-  /*
-    #handleArchiveClick = () => {
-      this.#handleDataChange({...this.#point, isArchive: !this.#point.isArchive});
-    };
-  */
-  #handleFormSubmit = () => {
-    this.#handleDataChange(this.#point);
-
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
     this.#replaceFormToCard();
   };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(UserAction.DELETE_POINT, UpdateType.MINOR, point);
+  };
+
+  #handleResetClick = () => {
+    this.#replaceFormToCard();
+  };
+
 }
